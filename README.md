@@ -1,11 +1,11 @@
-# TC3041 Proyecto  Final Primavera 2019
+﻿# TC3041 Proyecto  Final Primavera 2019
 
 #*[Poner aquí el Título del Proyecto]*
 ---
 
 ##### Integrantes:
-1. *[Poner aquí Nombre y Apellidos del integrante 1]*
-2. *[Poner aquí Nombre y Apellidos del integrante 2]*
+1. *Moisés Uriel Torres*
+2. *Carlos Daniel Atilano*
 
 
 ---
