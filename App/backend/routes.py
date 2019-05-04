@@ -1,9 +1,9 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-app = Flask(__name__)
+from flask import render_template, url_for, flash, redirect
+from App import app
+from App.dbs.SQLmodels import User, Review
+from App.frontend.forms import RegistrationForm, LoginForm
 
-#Secret key
-app.config['SECRET_KEY'] = '83a06f37055cbb6f8eb86a4a2608748c'
+# Mongo pass: tx3lUZMAbWSbFAY0
 
 posts = [
 	{
@@ -50,6 +50,3 @@ def login():
     	return redirect(url_for('home'))
 
     return render_template('login.html', title='Login', form=form)
-
-if __name__ == '__main__':
-	app.run(debug=True)
