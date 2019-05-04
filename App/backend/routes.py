@@ -1,6 +1,7 @@
 from flask import render_template, url_for, flash, redirect
 from App import app
 from App.dbs.SQLmodels import User, Review
+from App.dbs.MongoModels import Book
 from App.frontend.forms import RegistrationForm, LoginForm
 
 # Mongo pass: tx3lUZMAbWSbFAY0
