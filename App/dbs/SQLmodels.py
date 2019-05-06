@@ -39,7 +39,7 @@ class Book(SQLdb.Model):
     reviews = SQLdb.relationship('Review', backref='book_reviewed', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.title}','{self.author}','{self.genre}')"
+        return f"Book('{self.title}','{self.author}','{self.genre}')"
 
 SQLdb.create_all()
 SQLdb.session.commit()
