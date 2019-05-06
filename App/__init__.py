@@ -1,36 +1,36 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-#import pymongo
+import pymongo
 #import urllib
-from flask_mongoalchemy import MongoAlchemy
+#from flask_mongoalchemy import MongoAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 
+app = Flask(__name__, template_folder="frontend/templates",
+            static_folder="frontend/static")
 
-app = Flask(__name__, template_folder="frontend/templates", static_folder="frontend/static")
-
-#Secret key
+# Secret key
 app.config['SECRET_KEY'] = '83a06f37055cbb6f8eb86a4a2608748c'
 
-#SQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dbs/SQLdb.db' #temporal db
+# SQL
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dbs/SQLdb.db'  # temporal db
 SQLdb = SQLAlchemy(app)
 
-#Mongodb
+# Mongodb
 #mongodb_url = urllib.parse.quote('mongodb+srv://Bookmark:FL8qe83XmlAn9cy4@bookmark-t5ss4.mongodb.net/test?retryWrites=true')
-#app.config['MONGOALCHEMY_SERVER'] = mongodb_url 
+#app.config['MONGOALCHEMY_SERVER'] = mongodb_url
 #app.config['MONGOALCHEMY_DATABASE'] = 'Bookmark'
 #app.config['MONGOALCHEMY_USER'] = 'Papyrus'
 #app.config['MONGOALCHEMY_PASSWORD'] = 'uW0Kt3DuWDyAP76h'
-#Mongodb = MongoAlchemy(app) 
-#client = pymongo.MongoClient("mongodb+srv://Papyrus:bIY9JeyQIrg8aatP@bookmark-t5ss4.mongodb.net/test?retryWrites=true")
-#db = client.test
+#Mongodb = MongoAlchemy(app)
+#Mclient = pymongo.MongoClient('mongodb://Bookmark:vuElZWVBZOGlAq0N@bookmark-t5ss4.mongodb.net:27017,bookmark-t5ss4.mongodb.net:27017,bookmark-t5ss4.mongodb.net:27017/test')
+#Mdb = client.test
 
-#Password encryptation
+# Password encryptation
 bcrypt = Bcrypt(app)
 
-#Login manager
+# Login manager
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'

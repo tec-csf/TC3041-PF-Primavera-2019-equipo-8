@@ -6,25 +6,24 @@ from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 import os
 
-books = [
-    {
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'April 28, 2019'
-        
-    },
-    {
-        'author': 'Moisés Torres',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 29, 2019'
-    }
-]
+#Book.query.filter_by().image_file
 
+nombre = 'Moisés Uriel Torres'
+
+#@app.route("/home/<filename>")
+#def send_image(filename):
+#    return send_from_directory("home",filename)
+
+
+@app.route("/home/<bookfile>")
+def image_page(bookfile):
+    return render_template('book.html', book=bookfile)
 
 @app.route("/")
 @app.route("/home")
 def home():
+    #Get all the books
+    books = Book.query.filter_by()
     return render_template('home.html', books=books)
 
 
@@ -82,10 +81,12 @@ def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'frontend\\static\\profile_pics',picture_fn)
+    picture_path = os.path.join(
+        app.root_path, 'frontend\\static\\profile_pics', picture_fn)
     form_picture.save(picture_path)
 
     return picture_fn
+
 
 @app.route("/account", methods=['GET', 'POST'])
 @login_required

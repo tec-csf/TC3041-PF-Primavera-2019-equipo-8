@@ -2,21 +2,30 @@
 
 {% block content %}
 
-	{% for book in books %}
 
-	<!-- <article class="media content-section"> 
+		<div class="container">
 
-	  <div class="media-body">
-	    <div class="article-metadata">
-	      <a class="mr-2" href="#">{{ post.author }}</a>
-	      <small class="text-muted">{{ post.date_posted }}</small>
-	    </div>
-	    <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-	    <p class="article-content">{{ post.content }}</p>
-	  </div> 
-	</article> -->
+		    <div class="row">
 
-	{% endfor %}
+		        <div class="col-lg-12">
+		            <h1 class="page-header"></h1>
+		        </div>
+		        <hr>
+		        {% for book in books %}
+		        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+		        	<p>
+		            <a href="{{url_for('image_page', bookfile=book)}}">
+		            	<img class="img-responsive" src="{{book.image_file}}" width=150 height=200>
+		       		</a>
+		       		</p>
+		        </div>
+		        {% endfor %}
+		    </div>
+		</div>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+		        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+		        crossorigin="anonymous"></script>
+
 
 {% endblock content %}
 
