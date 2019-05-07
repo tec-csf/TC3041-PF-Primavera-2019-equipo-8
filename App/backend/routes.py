@@ -13,6 +13,7 @@ import os
 def image_page(bookid):
 
     if not current_user.is_authenticated:
+        flash('You have to log in to access the books', 'danger')
         return redirect(url_for('home'))
 
     book = Book.query.filter_by(id=bookid).first()
@@ -26,7 +27,8 @@ def image_page(bookid):
         flash('Review submitted', 'success')
         return redirect(url_for('home'))
 
-    return render_template('book.html', book=book,reviews=book.reviews, form=form)
+    return render_template('book.html', book=book,reviews=book.reviews, form=form, )
+
 
 @app.route("/")
 @app.route("/home")
