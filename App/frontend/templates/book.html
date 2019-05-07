@@ -2,11 +2,58 @@
 
 {% block content %}
 
-	<div>
-		<p> {{ book.id }} </p>
+	<h1> {{ book.title }} </h1>
+	<h5> Author: {{book.author}}</h5>
+	<h5> Genre: {{book.genre}} </h5>
 
-	</div>	
+	<img src="{{book.image_file}}" widht=250 height=300>
 	
+	<p>
+		<div class='content-section'> 
+			<form method="POST" action="">
 
+				{{ form.hidden_tag() }}
+				<fieldset class="form-group">
+				<legend class="border-bottom mb-4">What did you think about this book?</legend>
+
+				<!-- Content -->
+				<div class="form-group">
+					{{ form.content.label(class="form-control-label") }}
+
+					<!-- If the content has errors, all the errors are printed -->
+					{% if form.content.errors %}
+					{{ form.content(class="form-control form-control-lg is-invalid") }}
+					<div class="invalid-feedback">
+						{% for error in form.content.errors %}
+							<span>{{ error }}</span>
+						{% endfor %}
+					</div>
+					{% else %}
+						{{ form.content(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+
+				<!-- Submit -->
+				<div class="form-group">
+					{{ form.submit(class="btn btn-outline-info") }} 
+				</div>
+
+			</form>
+		</div>
+	</p>
+	{% for review in reviews %}
+		<article class="media content-section"> 
+
+		  <div class="media-body">
+		    <div class="article-metadata">
+		      <a class="mr-2" href="#">{{ review.user_id }}</a>
+		      <small class="text-muted">{{ review.date_posted }}</small>
+		    </div>
+		    <h2><a class="article-title" href="#">Review</a></h2>
+		    <p class="article-content">{{ review.content }}</p>
+		  </div> 
+		</article>
+
+	{% endfor %}
 
 {% endblock content %}

@@ -51,3 +51,7 @@ class UpdateAccountForm(FlaskForm):
 			user = User.query.filter_by(email=email.data).first()
 			if user:
 				raise ValidationError('That email is already in use. Please choose another one.')
+
+class ReviewForm(FlaskForm):
+	content = StringField('', validators=[DataRequired(), Length(min=5, max=500)]) 
+	submit = SubmitField('Submit')

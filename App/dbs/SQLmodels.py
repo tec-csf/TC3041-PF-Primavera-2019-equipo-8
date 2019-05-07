@@ -34,7 +34,6 @@ class Review(SQLdb.Model):
     def __repr__(self):
         return f"User('{self.date_posted}','{self.content}')"
 
-
 class Book(SQLdb.Model):
     id = SQLdb.Column(SQLdb.Integer, primary_key=True)
     title = SQLdb.Column(SQLdb.String(20), nullable=False)
@@ -42,10 +41,23 @@ class Book(SQLdb.Model):
     year = SQLdb.Column(SQLdb.Integer, nullable=False)
     genre = SQLdb.Column(SQLdb.String(20), nullable=False)
     image_file = SQLdb.Column(SQLdb.String(20), nullable=False)
-    reviews = SQLdb.relationship('Review', backref='book_reviewed', lazy=True)
+    reviews = SQLdb.relationship('Reviews', backref='book_reviewed', lazy=True)
 
     def __repr__(self):
         return f"Book('{self.title}','{self.author}','{self.genre}')"
+
+class Reviews(SQLdb.Model):
+    id = SQLdb.Column(SQLdb.Integer, primary_key=True)
+    date_posted = SQLdb.Column(
+        SQLdb.DateTime, nullable=False, default=datetime.utcnow)
+    content = SQLdb.Column(SQLdb.Text, nullable=False)
+    user_id = SQLdb.Column(
+        SQLdb.Integer, SQLdb.ForeignKey('user.id'), nullable=False)
+    book_id = SQLdb.Column(
+        SQLdb.Integer, SQLdb.ForeignKey('book.id'), nullable=False)
+
+    def __repr__(self):
+        return f"User('{self.date_posted}','{self.content}')"
 
 
 SQLdb.create_all()

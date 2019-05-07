@@ -1,23 +1,32 @@
 from flask import render_template, url_for, flash, redirect, request
 from App import app, SQLdb, bcrypt
-from App.dbs.SQLmodels import User, Review, Book
-from App.frontend.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from App.dbs.SQLmodels import User, Reviews, Book
+from App.frontend.forms import RegistrationForm, LoginForm, UpdateAccountForm, ReviewForm
 from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 import os
 
 #Book.query.filter_by().image_file
 
-nombre = 'Moisés Uriel Torres'
 
-#@app.route("/home/<filename>")
-#def send_image(filename):
-#    return send_from_directory("home",filename)
+@app.route('/<bookid>', methods=['GET', 'POST'])
+def image_page(bookid):
 
+    if not current_user.is_authenticated:
+        return redirect(url_for('home'))
 
-@app.route("/home/<bookfile>")
-def image_page(bookfile):
-    return render_template('book.html', book=bookfile)
+    book = Book.query.filter_by(id=bookid).first()
+
+    form = ReviewForm()
+
+    if form.validate_on_submit():
+        review = Reviews(content=form.content.data, user_id=current_user.id, book_id=book.id)
+        SQLdb.session.add(review)
+        SQLdb.session.commit()
+        flash('Review submitted', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('book.html', book=book,reviews=book.reviews, form=form)
 
 @app.route("/")
 @app.route("/home")
