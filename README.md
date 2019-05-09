@@ -7,7 +7,6 @@
 1. *Moisés Uriel Torres*
 2. *Carlos Daniel Atilano*
 
-
 ---
 ## 1. Aspectos generales
 
@@ -24,19 +23,16 @@ A continuación se mencionan los requerimientos técnicos mínimos del proyecto,
 * Todo el código, *datasets* y la documentación del proyecto debe alojarse en un repositorio de GitHub siguiendo al estructura que aparece a continuación.
 
 ### 1.2 Estructura del repositorio
-El proyecto debe seguir la siguiente estructura de carpetas:
+
 ```
-- / 			        # Raíz de todo el proyecto
+- / 	                # Raíz de todo el proyecto
+    - App/              # Raíz de la aplicación
+          - frontend    # Carpeta con la solución del frontend (Web app)
+          - backend     # Carpeta con la solución del backend (CMS)
+          - dbs         # Carpeta con los modelos, catálogos y scripts necesarios para generar las bases de datos
+          - __init__    # Archivo principal de la aplicación
+    - run.py            # Archivo de ejecución del programa
     - README.md			# Archivo con los datos del proyecto (este archivo)
-    - frontend			# Carpeta con la solución del frontend (Web app)
-    - backend			# Carpeta con la solución del backend (CMS)
-    - api			# Carpeta con la solución de la API
-    - datasets		        # Carpeta con los datasets y recursos utilizados (csv, json, audio, videos, entre otros)
-    - dbs			# Carpeta con los modelos, catálogos y scripts necesarios para generar las bases de datos
-    - models			# Carpeta donde se almacenarán los modelos de Machine Learning ya entrenados 
-    - docs			# Carpeta con la documentación del proyecto
-        - stage_f               # Documentos de la entrega final
-        - manuals               # Manuales y guías
 ```
 
 ### 1.3 Documentación  del proyecto
@@ -51,7 +47,7 @@ Como parte de la entrega final del proyecto, se debe incluir la siguiente inform
 
 ## 2. Descripción del proyecto
 
-*[Incluya aquí la descripción del proyecto seleccionado.]*
+Nosotros decidimos hacer una aplicación web a la que llamamos Papyrus. Papyrus es una aplicación dedicada a todas las personas que les guste leer y que quieran escuchar la opinión de otras personas acerca de un libro en específico. En Papyrus los usuarios pueden crearse una cuenta para acceder a la página web de cada libro y así leer todas sus reseñas o escribir una reseña ellos mismos. 
 
 ## 3. Solución
 
@@ -59,52 +55,48 @@ A continuación aparecen descritos los diferentes elementos que forman parte de 
 
 ### 3.1 Modelos de *bases de datos* utilizados
 
-*[Incluya aquí una explicación del análisis realizado y la justificación de los modelos de *bases de datos* seleccionados. Incluya todo lo que considere necesario para que una persona sin conocimientos técnicos pueda entender de que trata su solución.]*
+- SQL: utilizamos una base de datos sql para administrar la información de todos los usuarios, libros y reseñas. Utilizamos SQLalchemy para vincular la db con python. Decidimos utilizamor este modelo de base de datos (en vez de uno noSQL) porque nuestro programa funciona mejor con una base de datos normalizada, aparte de que no tenemos muchas tablas y no necesitamos hacer tantos joins, por lo que no nos afecta usar una base de datos sql. Aparte, en flask (el framework que utilizamos para desarrollar la app) es mucho más fácil trabajar con SQLalchemy que con pymongo o algún otro modelo de mongo.
+Los datasets que utilizamos fueron el de usuarios, el de libros y el de reseñas. Los datos de los usuarios se crean al momento de que un usuario se registra, los de reseñas al momento de que un usuario deja una reseña y el de libros nosotros lo creamos insertando los datos manualmente. Actualmente la db cuenta con solo 12 libros, pero se le podrían agregar más y automaticamente se añadirían a la página
+
+- redis: utilizamos redis para administrar las sesiones de los usuarios. Esto es muy útil ya que así las sesiones son administradas desde un servidor en vez de cache. Para esto usamos la librería flask-session que utiliza un servidor de redis y permite administrarlo desde flask. Los registros de los usuarios se crean al momento de que inician sesión.
 
 ### 3.2 Arquitectura de la solución
 
-*[Incluya aquí un diagrama donde se aprecie la arquitectura de la solución propuesta, así como la interacción entre los diferentes componentes de la misma.]*
+![](App/frontend/static/images/Structure.png)
 
 ### 3.3 Frontend
-
-*[Incluya aquí una explicación de la solución utilizada para el frontend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
+Para el frontend de nuestra aplicación utilizamos únicamente html y css, en conjunto con algunos componentes de bootstrap.
 
 #### 3.3.1 Lenguaje de programación
-#### 3.3.2 Framework
-#### 3.3.3 Librerías de funciones o dependencias
+Python en conjunto con html y css
 
 ### 3.4 Backend
-
-*[Incluya aquí una explicación de la solución utilizada para el backend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
+Para desarrollar nuestra aplicación decidimos utilizar flask y un framework especializado en desarrollo web llamado flask. Utilizamos varias librerías de flask y también de las base de datos que utilizamos.
 
 #### 3.4.1 Lenguaje de programación
+Python
+
 #### 3.4.2 Framework
+Flask
+
 #### 3.4.3 Librerías de funciones o dependencias
-
-### 3.5 API
-
-*[Incluya aquí una explicación de la solución utilizada para implementar la API del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
-
-#### 3.5.1 Lenguaje de programación
-#### 3.5.2 Framework
-#### 3.5.3 Librerías de funciones o dependencias
-
-*[Incluya aquí una explicación de cada uno de los endpoints que forman parte de la API. Cada endpoint debe estar correctamente documentado.]*
-
-*[Por cada endpoint debe incluir lo siguiente:]*
-
-* **Descripción**:
-* **URL**:
-* **Verbos HTTP**:
-* **Headers**:
-* **Formato JSON del cuerpo de la solicitud**: 
-* **Formato JSON de la respuesta**:
-
+flask
+flask-wtf
+flask-sqlalchemy
+flask-bcrypt
+flask-session
+redis
 
 ## 3.6 Pasos a seguir para utilizar el proyecto
 
-*[Incluya aquí una guía paso a paso para poder utilizar el proyecto, desde la clonación del repositorio hasta el despliegue de la solución en una plataforma en la nube.]*
 
 ## 4. Referencias
 
-*[Incluya aquí las referencias a sitios de interés, datasets y cualquier otra información que haya utilizado para realizar el proyecto y que le puedan ser de utilidad a otras personas que quieran usarlo como referencia]*
+- Documentación de Flask: http://flask.pocoo.org/docs/1.0/
+- Documentación de Flask-wtf: https://flask-wtf.readthedocs.io/en/stable/
+- documentación de Flask-bcrypt: https://flask-bcrypt.readthedocs.io/en/latest/
+- Documentación de Flask-session: https://pythonhosted.org/Flask-Session/
+- Api de Flask-SQLalchemy: https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/
+
+- Tutorial para flask-session: https://www.tutorialspoint.com/flask/flask_sessions.htm
+- Tutorial de aplicaciones web en flask: https://www.youtube.com/watch?v=MwZwr5Tvyxo&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH
