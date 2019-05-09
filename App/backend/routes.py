@@ -1,47 +1,55 @@
-from flask import render_template, url_for, flash, redirect, request
-from App import app, SQLdb, bcrypt
+from flask import render_template, url_for, flash, redirect, request, session
+from App import app, SQLdb, bcrypt, Session
 from App.dbs.SQLmodels import User, Reviews, Book
 from App.frontend.forms import RegistrationForm, LoginForm, UpdateAccountForm, ReviewForm
-from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 import os
 
-#Book.query.filter_by().image_file
-
-
+# Route for the page of each book
 @app.route('/<bookid>', methods=['GET', 'POST'])
 def image_page(bookid):
 
-    if not current_user.is_authenticated:
+    if not 'username' in session:
         flash('You have to log in to access the books', 'danger')
         return redirect(url_for('home'))
 
     book = Book.query.filter_by(id=bookid).first()
 
+    username = session['username']
+    user = User.query.filter_by(username=username).first()
+
+    reviews = Reviews.query.filter_by(book_id=bookid)
+
+    for review in reviews:
+        review.username = User.query.filter_by(id=review.user_id).first().username
+
     form = ReviewForm()
 
     if form.validate_on_submit():
-        review = Reviews(content=form.content.data, user_id=current_user.id, book_id=book.id)
+        review = Reviews(content=form.content.data,
+                         user_id=user.id, book_id=book.id)
         SQLdb.session.add(review)
         SQLdb.session.commit()
         flash('Review submitted', 'success')
         return redirect(url_for('home'))
 
-    return render_template('book.html', book=book,reviews=book.reviews, form=form, )
+    return render_template('book.html', book=book, reviews=book.reviews, form=form)
 
 
+# Route for the home page
 @app.route("/")
 @app.route("/home")
 def home():
-    #Get all the books
+    # Get all the books
     books = Book.query.filter_by()
     return render_template('home.html', books=books)
 
 
+# Route for the register page
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
-    if current_user.is_authenticated:
+    if 'username' in session:
         return redirect(url_for('home'))
 
     form = RegistrationForm()
@@ -54,17 +62,18 @@ def register():
                     password=hashed_password)  # The user is created
         SQLdb.session.add(user)  # The user is added to the db
         SQLdb.session.commit()  # The changes of the db are commited
-        flash('Account created successfully', 'success')
+        flash('Account created successfully. You can log in now.', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', title='Register', form=form)
 
 
+# Route for the login page
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
 
-    if current_user.is_authenticated:
+    if 'username' in session:
         return redirect(url_for('home'))
 
     # Conditional that checks if the login is successful
@@ -73,7 +82,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
+            session['username'] = user.username
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
@@ -84,7 +93,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    logout_user()
+    session.pop('username', None)
     return redirect(url_for('home'))
 
 
@@ -100,26 +109,37 @@ def save_picture(form_picture):
 
 
 @app.route("/account", methods=['GET', 'POST'])
-@login_required
 def account():
+
+    if not 'username' in session:
+        return redirect(url_for('home'))
+
+    username = session['username']
+    user = User.query.filter_by(username=username).first()
+
     form = UpdateAccountForm()
 
     if form.validate_on_submit():
 
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
-            current_user.image_file = picture_file
+            user.image_file = picture_file
 
-        current_user.username = form.username.data
-        current_user.email = form.email.data
+        user.username = form.username.data
+        user.email = form.email.data
         SQLdb.session.commit()
+
+        session.pop('username', None)
+        session['username'] = user.username
+
         flash('Your account has been updated', 'success')
         return redirect(url_for('account'))
 
     elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.email.data = current_user.email
+        form.email.data = user.email    
+        form.username.data = user.username
+        
 
     image_file = url_for(
-        'static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account', image_file=image_file, form=form)
+        'static', filename='profile_pics/' + user.image_file)
+    return render_template('account.html', title='Account', image_file=image_file, form=form, user=user)

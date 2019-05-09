@@ -1,12 +1,6 @@
-from App import SQLdb, login_manager
+from App import SQLdb
 from datetime import datetime
 from flask_login import UserMixin
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
 
 class User(SQLdb.Model, UserMixin):
     id = SQLdb.Column(SQLdb.Integer, primary_key=True)
