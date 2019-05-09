@@ -80,12 +80,12 @@ Python
 Flask
 
 #### 3.4.3 Librerías de funciones o dependencias
-flask
-flask-wtf
-flask-sqlalchemy
-flask-bcrypt
-flask-session
-redis
+- flask
+- flask-wtf
+- flask-sqlalchemy
+- flask-bcrypt
+- flask-session
+- redis
 
 ## 3.6 Pasos a seguir para utilizar el proyecto
 
